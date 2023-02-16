@@ -1,3 +1,3 @@
 class AppString {
-  static const appName = 'School Market';
+  static const appName = 'The Kids File';
 }

@@ -3,6 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
 import 'package:school_project/modals/feed_modal.dart';
+import 'package:school_project/screens/join_now/join_now_screen.dart';
 import 'package:school_project/utils/app_images.dart';
 import 'package:school_project/utils/app_string.dart';
 import 'package:school_project/common_widgets/feed_item.dart';
@@ -110,17 +111,13 @@ class _FeedsScreenState extends State<FeedsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: NeumorphicColors.background,
-      floatingActionButton: Neumorphic(
-        padding: const EdgeInsets.all(6),
-        style: const NeumorphicStyle(
-            shape: NeumorphicShape.concave,
-            boxShape: NeumorphicBoxShape.circle()
-        ),
-        child: const Icon(
-          Icons.comment,
-          color: Colors.grey,
-        ),
-      ),
+      floatingActionButton: NeumorphicButton(
+        style: NeumorphicStyle(color: Colors.blue),
+          onPressed: (){
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> const JoinNowScreen()));
+      },margin: const EdgeInsets.only(bottom: 30,right: 5),
+          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 25), child: const Text("Join Now",textAlign: TextAlign.center,
+            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white))),
 
       body: SafeArea(
         child: Column(

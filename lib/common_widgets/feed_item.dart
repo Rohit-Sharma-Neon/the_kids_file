@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
+import 'package:school_project/screens/join_now/join_now_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
 import 'package:school_project/utils/app_images.dart';
 import 'package:school_project/utils/dialogs.dart';
@@ -44,27 +45,27 @@ class _FeedItemState extends State<FeedItem> {
               children: [
                 const CircleAvatar(
                   radius: 22,
-                  backgroundColor: AppColors.grey,
-                  backgroundImage: AssetImage(AppImages.adImage),
+                  backgroundColor: Colors.transparent,
+                  backgroundImage: AssetImage(AppImages.appIcon),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: const [
                     CommonText(
-                      text: widget.feedData.name ?? '',
+                      text: "The Kids File",
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                       fontSize: 14,
                     ),
-                    CommonText(
-                      text: widget.feedData.email ?? '',
-                      color: AppColors.grey2,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
+                    // CommonText(
+                    //   text: widget.feedData.email ?? '',
+                    //   color: AppColors.grey2,
+                    //   fontWeight: FontWeight.bold,
+                    //   fontSize: 12,
+                    // ),
                   ],
                 ),
               ],
@@ -143,6 +144,7 @@ class _FeedItemState extends State<FeedItem> {
                       padding: const EdgeInsets.all(6),
                       style: const NeumorphicStyle(
                         shape: NeumorphicShape.concave,
+                        color: NeumorphicColors.background,
                         boxShape: NeumorphicBoxShape.circle()
                       ),
                       child: const Icon(
@@ -163,7 +165,7 @@ class _FeedItemState extends State<FeedItem> {
                 widthGap(20),
                 InkWell(
                   onTap: () {
-                    _bottomsheet(context);
+                    // _bottomsheet(context);
                   },
                   child: Row(
                     children: [
@@ -171,6 +173,7 @@ class _FeedItemState extends State<FeedItem> {
                         padding: const EdgeInsets.all(6),
                         style: const NeumorphicStyle(
                             shape: NeumorphicShape.concave,
+                            color: NeumorphicColors.background,
                             boxShape: NeumorphicBoxShape.circle()
                         ),
                         child: const Icon(
@@ -189,15 +192,21 @@ class _FeedItemState extends State<FeedItem> {
                   ),
                 ),
                 const Spacer(),
-                Neumorphic(
-                  padding: const EdgeInsets.all(6),
-                  style: const NeumorphicStyle(
-                      shape: NeumorphicShape.concave,
-                      boxShape: NeumorphicBoxShape.circle()
-                  ),
-                  child: const Icon(
-                    Icons.share_rounded,
-                    color: Colors.grey,
+                GestureDetector(
+                  onTap: (){
+
+                  },
+                  child: Neumorphic(
+                    padding: const EdgeInsets.all(6),
+                    style: const NeumorphicStyle(
+                        shape: NeumorphicShape.concave,
+                        color: NeumorphicColors.background,
+                        boxShape: NeumorphicBoxShape.circle()
+                    ),
+                    child: const Icon(
+                      Icons.share_rounded,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ],
