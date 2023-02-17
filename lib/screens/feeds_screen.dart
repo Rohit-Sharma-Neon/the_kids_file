@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
 import 'package:school_project/modals/feed_modal.dart';
@@ -129,7 +130,7 @@ class _FeedsScreenState extends State<FeedsScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   CommonText(
-                    text: AppString.appName,
+                    text: appName,
                     fontWeight: FontWeight.w700,
                     fontSize: 18,
                   ),
@@ -138,12 +139,20 @@ class _FeedsScreenState extends State<FeedsScreen> {
             ),
 
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.only(top: 20.0),
+              child: AnimationLimiter(
                 child: ListView.builder(
+                  padding: const EdgeInsets.only(top: 20.0,bottom: 100),
                   itemBuilder: (context, index) {
-                    return FeedItem(
-                      feedData: dashBoardData[index],
+                    return AnimationConfiguration.staggeredList(
+                      position: index,
+                      duration: const Duration(milliseconds: 375),
+                      child: SlideAnimation(
+                        child: FadeInAnimation(
+                          child: FeedItem(
+                            feedData: dashBoardData[index],
+                          ),
+                        ),
+                      ),
                     );
                   },
                   itemCount: dashBoardData.length,

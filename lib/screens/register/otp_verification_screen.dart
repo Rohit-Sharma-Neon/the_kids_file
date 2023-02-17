@@ -3,6 +3,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import 'package:school_project/common_widgets/custom_button.dart';
 import 'package:school_project/screens/dashboard.dart';
+import 'package:school_project/screens/home_screen/home_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -16,8 +17,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final TextEditingController _pinController = TextEditingController();
   @override
   void dispose() {
-    super.dispose();
     _pinController.dispose();
+    super.dispose();
+
   }
 
   @override
@@ -25,6 +27,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     var _size = MediaQuery.of(context).size;
     return Scaffold(
       backgroundColor: NeumorphicColors.background,
+      appBar: NeumorphicAppBar(title: const Text("Verify Your Number",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),centerTitle: true,automaticallyImplyLeading: false,
+          leading: NeumorphicBackButton(onPressed: (){Navigator.pop(context);},style: const NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(),depth: 10))),
       body: ListView(
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
@@ -33,51 +37,14 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           vertical: 39.0,
         ),
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-            Neumorphic(
-              padding: const EdgeInsets.all(15),
-              style: const NeumorphicStyle(
-                  shape: NeumorphicShape.concave,
-                  boxShape: NeumorphicBoxShape.circle()
-              ),
-              child: const Icon(
-                Icons.arrow_back_ios_rounded,
-                size: 25,
-                color: Colors.white,
-              ),
-            ),
-            const Text(
-              'Verify Your Number',
-              style: TextStyle(
-                color: Colors.black,
-                fontSize: 15.0,
-              ),
-            ),
-              Neumorphic(
-                padding: const EdgeInsets.all(15),
-                style: const NeumorphicStyle(
-                    shape: NeumorphicShape.concave,
-                    depth: 0,
-                    boxShape: NeumorphicBoxShape.circle(),
-                  color: Colors.transparent
-                ),
-                child: const Icon(
-                  Icons.arrow_back_ios_rounded,
-                  size: 25,
-                  color: Colors.white,
-                ),
-              ),
-          ],),
-          Container(
-            width: _size.width,
-            height: _size.height * 0.4,
-            child: Image.asset(
-              'assets/images/otpVerificationImg.png',
-              // fit: BoxFit.cover,
-            ),
-          ),
+          // Container(
+          //   width: _size.width,
+          //   height: _size.height * 0.4,
+          //   child: Image.asset(
+          //     'assets/images/otpVerificationImg.png',
+          //     // fit: BoxFit.cover,
+          //   ),
+          // ),
           const SizedBox(
             height: 40.0,
           ),
@@ -129,6 +96,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             width: 200,
             child: PinCodeTextField(
                 keyboardType: TextInputType.phone,
+                autoFocus: true,
                 pinTheme: PinTheme(
                   inactiveColor: Colors.grey,
                   selectedColor: AppColors.primary,
@@ -165,7 +133,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             ),
           ),
           const SizedBox(
-            height: 30.0,
+            height: 70.0,
           ),
           CustomButton(
             onTap: () {
@@ -175,10 +143,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   builder: (context) => const ChildDetailScreen(),
                 ),
               );*/
-              Navigator.push(
+              Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const DashBoardScreen(),
+                  builder: (context) => const HomeScreen(),
                 ),
               );
             },

@@ -1,12 +1,18 @@
+import 'dart:io';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
-import 'package:school_project/screens/join_now/join_now_screen.dart';
+import 'package:school_project/screens/comment_screen/comment_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
 import 'package:school_project/utils/app_images.dart';
 import 'package:school_project/utils/dialogs.dart';
 import 'package:school_project/utils/helper_methods.dart';
+import 'package:share_plus/share_plus.dart';
 
 
 import '../modals/feed_modal.dart';
@@ -24,6 +30,7 @@ class _FeedItemState extends State<FeedItem> {
   CarouselController carouselController = CarouselController();
 
   int currentPage = 1;
+  bool isLiked = false;
 
   @override
   Widget build(BuildContext context) {
@@ -138,34 +145,41 @@ class _FeedItemState extends State<FeedItem> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Row(
-                  children: [
-                    Neumorphic(
-                      padding: const EdgeInsets.all(6),
-                      style: const NeumorphicStyle(
-                        shape: NeumorphicShape.concave,
-                        color: NeumorphicColors.background,
-                        boxShape: NeumorphicBoxShape.circle()
+                GestureDetector(
+                  onTap: (){
+                    setState(() {
+                      isLiked = !isLiked;
+                    });
+                  },
+                  child: Row(
+                    children: [
+                      Neumorphic(
+                        padding: const EdgeInsets.all(6),
+                        style: const NeumorphicStyle(
+                          shape: NeumorphicShape.concave,
+                          color: NeumorphicColors.background,
+                          boxShape: NeumorphicBoxShape.circle()
+                        ),
+                        child: Icon(
+                          Icons.favorite,
+                          size: 25,
+                          color: isLiked ? Colors.red : Colors.grey,
+                        ),
                       ),
-                      child: const Icon(
-                        Icons.favorite,
-                        size: 25,
-                        color: Colors.grey,
+                      widthGap(5),
+                      const CommonText(
+                        text: '44',
+                        color: AppColors.grey2,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
                       ),
-                    ),
-                    widthGap(5),
-                    const CommonText(
-                      text: '44',
-                      color: AppColors.grey2,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 12,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 widthGap(20),
                 InkWell(
                   onTap: () {
-                    // _bottomsheet(context);
+                    PersistentNavBarNavigator.pushNewScreen(context, screen: const CommentScreen());
                   },
                   child: Row(
                     children: [
@@ -193,8 +207,14 @@ class _FeedItemState extends State<FeedItem> {
                 ),
                 const Spacer(),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () async {
+                    final bytes = await rootBundle.load('assets/images/dummy_home_banner.jpeg');
+                    final list = bytes.buffer.asUint8List();
 
+                    final tempDir = await getTemporaryDirectory();
+                    final file = await File('${tempDir.path}/dummy_home_banner.jpeg').create();
+                    file.writeAsBytesSync(list);
+                    Share.shareXFiles([XFile(file.path)], text: 'The Kids File');
                   },
                   child: Neumorphic(
                     padding: const EdgeInsets.all(6),

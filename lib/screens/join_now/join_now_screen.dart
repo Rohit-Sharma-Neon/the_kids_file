@@ -2,7 +2,6 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:school_project/api_services/api_methods.dart';
 import 'package:school_project/screens/join_now/thank_you_screen.dart';
 import 'package:school_project/utils/dialogs.dart';
-import 'package:toast/toast.dart';
 
 class JoinNowScreen extends StatefulWidget {
   const JoinNowScreen({Key? key}) : super(key: key);
@@ -141,7 +140,6 @@ class _JoinNowScreenState extends State<JoinNowScreen> {
           Dialogs().showLoader(context: context);
           ApiMethods().joinNowApi(name: nameController.text.trim(),schoolName: schoolController.text.trim(),className: classController.text.trim(),email: emailController.text.trim(),mobileNo: phoneController.text.trim()).then((value){
             Navigator.of(context, rootNavigator: true).pop(true);
-            print(value.success??false);
             if(value.success??false){
               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const ThankYouScreen()));
             }else{

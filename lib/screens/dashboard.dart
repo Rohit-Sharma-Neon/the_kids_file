@@ -3,10 +3,11 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:school_project/common_widgets/coming_soon.dart';
 import 'package:school_project/screens/feeds_screen.dart';
-import 'package:school_project/screens/notification_screen.dart';
+import 'package:school_project/screens/notification/notification_screen.dart';
 import 'package:school_project/screens/profile_screen.dart';
 import 'package:school_project/screens/quiz_screen.dart';
 import 'package:school_project/screens/register/register_screen.dart';
+import 'package:school_project/screens/register/select_school_screen.dart';
 import 'package:school_project/screens/search_screen.dart';
 
 import '../utils/app_colors.dart';
@@ -32,7 +33,7 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
     return [
       const FeedsScreen(),
       const ComingSoon(),
-      const ComingSoon(),
+      const SelectSchoolScreen(),
       const ComingSoon(),
       const ComingSoon(),
       // const QuizScreen(),
