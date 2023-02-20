@@ -1,5 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:school_project/common_widgets/animated_column.dart';
+import 'package:school_project/common_widgets/animated_list_view_builder.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/sizes.dart';
 
 
 class OrderDetailsScreen extends StatefulWidget {
@@ -76,159 +82,95 @@ class _OrderDetailsScreenState extends State<OrderDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Order Details',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 15.0,
-          ),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 17.0),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            const Text('Books :',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            ListView.builder(
+      backgroundColor: NeumorphicColors.background,
+      appBar: const BaseAppBar(title: "Order Details"),
+      body: AnimatedColumn(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          padding: const EdgeInsets.only(right: scaffoldHorizontalPadding,left: scaffoldHorizontalPadding,top: 10,bottom: 80),
+          children: [
+          const Text('Books :',
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          AnimationLimiter(
+            child: ListView.builder(
               itemCount: orderDataList.length,
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.only(top: 20),
               itemBuilder: (context, index) {
-                final orderdata = orderDataList[index];
-                return Column(
-                  children: [
-                    InkWell(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: const <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 6.0,
-                                offset: Offset(0.0, 3))
-                          ],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.grey,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                      child: Text(orderdata['name'] + ' Book')),
-                                  Text(
-                                      '${orderdata['qty'].toString()} *  ${orderdata['singlePrice'].toString()} ='),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text('₹ ${orderdata['price'].toString()}'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                );
-              },
+              final orderdata = orderDataList[index];
+             return AnimatedListViewBuilder(
+               index: index,
+               child: Neumorphic(
+                 padding: const EdgeInsets.all(8.0),
+                 margin: const EdgeInsets.only(bottom: 15),
+                 child: Row(
+                   children: [
+                     const CircleAvatar(
+                       radius: 20,
+                       backgroundColor: Colors.grey,
+                     ),
+                     const SizedBox(
+                       width: 10,
+                     ),
+                     Expanded(
+                         child: Text(orderdata['name'] + ' Book')),
+                     Text(
+                         '${orderdata['qty'].toString()} *  ${orderdata['singlePrice'].toString()} ='),
+                     const SizedBox(
+                       width: 5,
+                     ),
+                     Text('₹ ${orderdata['price'].toString()}'),
+                   ],
+                 ),
+               ),
+             );
+         },
+       ),
+          ),
+          const SizedBox(height: 20),
+          const Text('NoteBooks :',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 20),
+          AnimationLimiter(
+            child: ListView.builder(
+      itemCount: notebookOrderDataList.length,
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemBuilder: (context, index) {
+        final orderdata = notebookOrderDataList[index];
+        return AnimatedListViewBuilder(
+          index: index,
+          child: Neumorphic(
+            padding: const EdgeInsets.all(8.0),
+            margin: const EdgeInsets.only(bottom: 15),
+            child: Row(
+              children: [
+                const CircleAvatar(
+                  radius: 20,
+                  backgroundColor: Colors.grey,
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                    child: Text(orderdata['name'] + ' Book')),
+                Text(
+                    '${orderdata['qty'].toString()} *  ${orderdata['singlePrice'].toString()} ='),
+                const SizedBox(
+                  width: 5,
+                ),
+                Text('₹ ${orderdata['price'].toString()}'),
+              ],
             ),
-            const SizedBox(height: 20),
-            const Text('NoteBooks :',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
-            ListView.builder(
-              itemCount: notebookOrderDataList.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                final orderdata = notebookOrderDataList[index];
-                return Column(
-                  children: [
-                    InkWell(
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          boxShadow: const <BoxShadow>[
-                            BoxShadow(
-                                color: Colors.grey,
-                                blurRadius: 6.0,
-                                offset: Offset(0.0, 3))
-                          ],
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  const CircleAvatar(
-                                    radius: 20,
-                                    backgroundColor: Colors.grey,
-                                  ),
-                                  const SizedBox(
-                                    width: 10,
-                                  ),
-                                  Expanded(
-                                      child: Text(orderdata['name'] + ' Book')),
-                                  Text(
-                                      '${orderdata['qty'].toString()} *  ${orderdata['singlePrice'].toString()} ='),
-                                  const SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text('₹ ${orderdata['price'].toString()}'),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                  ],
-                );
-              },
+          ),
+        );
+      },
             ),
-            const SizedBox(height: 30),
-            Text('Total : ${bookTotal + noteBookTotal}',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-          ]),
-        ),
-      ),
+          ),
+          const SizedBox(height: 20),
+          Text('Total : ${bookTotal + noteBookTotal}',
+        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+        ]),
     );
   }
 }

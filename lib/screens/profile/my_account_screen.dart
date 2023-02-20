@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/screens/books%20order/books_order_screen.dart';
+import 'package:school_project/screens/gallery/gallery_screen.dart';
 import 'package:school_project/screens/no_route.dart';
 import 'package:school_project/screens/profile/payment_summary_screen.dart';
 import 'package:school_project/screens/trackChild/track_child_screen.dart';
 import 'package:school_project/screens/uniform%20order/uniform_order_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/sizes.dart';
 import '../notification/notification_screen.dart';
 
 class MyAccountScreen extends StatefulWidget {
@@ -18,78 +24,33 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   int notificationCount = 2;
 
   PreferredSizeWidget appBar() {
-    return AppBar(
-      title: const Text(
-        'Dashboard',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 15.0,
-        ),
-      ),
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      // leading: GestureDetector(
-      //   onTap: () {
-      //     Navigator.pop(context);
-      //   },
-      //   child: Container(
-      //     margin: const EdgeInsets.only(right: 17.0),
-      //     child: const Icon(
-      //       Icons.arrow_back_ios_new,
-      //       color: AppColors.primary,
-      //     ),
-      //   ),
-      // ),
+    return BaseAppBar(
+      title: "My Account",
       actions: [
-        GestureDetector(
-          onTap: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const NotificationScreen(
-                  whereToCome: "other",
-                ),
-              ),
-            );
-          },
-          child: Container(
-            width: 30,
-            height: 30,
-            alignment: Alignment.center,
-            margin: const EdgeInsets.only(right: 17.0),
-            child: Stack(
-              children: [
-                const Icon(
-                  Icons.notifications_none,
-                  color: AppColors.primary,
-                  size: 30,
-                ),
-                Container(
-                  width: 30,
-                  height: 30,
-                  alignment: Alignment.topRight,
-                  margin: const EdgeInsets.only(top: 5),
-                  child: Container(
-                    width: 15,
-                    height: 15,
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primary,
-                        border: Border.all(color: Colors.white, width: 1)),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Center(
-                        child: Text(
-                          notificationCount.toString(),
-                          style: const TextStyle(fontSize: 10),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
+        Stack(
+          alignment: Alignment.topRight,
+          children: [
+            SizedBox(
+              height: double.infinity,
+              child: NeumorphicButton(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  style: const NeumorphicStyle(depth: 8,color: AppColors.primaryColor),
+                  child: const Icon(
+                    Icons.notifications_none,
+                    color: Colors.black,
+                    size: 30,
+                  ),onPressed: (){PersistentNavBarNavigator.pushNewScreen(context, screen: const NotificationScreen(
+                whereToCome: "other",
+              ),);}),
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.only(right: 8,top: 4),
+              child: Text(
+                notificationCount.toString(),
+                style: const TextStyle(fontSize: 12,fontWeight: FontWeight.w500),
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -126,9 +87,7 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
     const BuildGridHelper(
       title: 'Gallery',
       imageUrl: 'assets/icons/showcase.png',
-      routeToPush: NoRoute(
-        title: 'Gallery',
-      ),
+      routeToPush: GalleryScreen()
     ),
     const BuildGridHelper(
       title: 'Digital Content',
@@ -173,78 +132,63 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.pageBgColor,
+      backgroundColor: AppColors.primaryColor,
       appBar: appBar(),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: scaffoldHorizontalPadding),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              'Welcome Rajeev!',
-              style: TextStyle(
-                fontSize: 22.0,
-              ),
-            ),
-            const SizedBox(
-              height: 20.0,
-            ),
             Stack(
+              alignment: Alignment.topRight,
               children: [
-                Card(
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.white,
-                        width: 2.0,
+                Neumorphic(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 10),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
+                  child: Row(
+                    children: [
+                      Neumorphic(
+                        style: const NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(),depth: 8,border: NeumorphicBorder(width: 2)),
+                        child: Image.asset(
+                          'assets/images/boyImage.png',
+                          width: 100,
+                          height: 100,
+                        ),
                       ),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 8.0, horizontal: 10.0),
-                      child: Row(
-                        children: [
-                          Image.asset(
-                            'assets/images/boyImage.png',
-                            width: 157.0,
-                            height: 157.0,
+                      const SizedBox(
+                        width: 11.0,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: const [
+                          Text(
+                            'Riyansh',
+                            style: TextStyle(
+                              fontSize: 18.0,
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
-                          const SizedBox(
-                            width: 11.0,
+                          SizedBox(
+                            height: 2.0,
                           ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: const [
-                              Text(
-                                'Riyansh',
-                                style: TextStyle(
-                                  fontSize: 18.0,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 2.0,
-                              ),
-                              Text(
-                                'VIIth - C',
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              )
-                            ],
-                          ),
+                          Text(
+                            'VIIth - C',
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
                         ],
                       ),
-                    ),
+                    ],
                   ),
                 ),
-                const Positioned(
-                  top: 18.0,
-                  right: 13.0,
-                  child: Icon(
+                Neumorphic(
+                  padding: const EdgeInsets.all(12),
+                  margin: const EdgeInsets.only(top: 18,right: 10),
+                  child: const Icon(
                     Icons.compare_arrows,
                   ),
                 ),
@@ -253,23 +197,32 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
             const SizedBox(
               height: 20.0,
             ),
-            Expanded(
+            AnimationLimiter(
               child: GridView.builder(
-                  physics: const BouncingScrollPhysics(
-                      parent: AlwaysScrollableScrollPhysics()),
+                shrinkWrap: true,
+                  physics: const NeverScrollableScrollPhysics(),
                   itemCount: buildGridHelper.length,
-                  padding: EdgeInsets.only(bottom: 50),
+                  padding: const EdgeInsets.only(bottom: 70),
                   gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
-                    mainAxisSpacing: 10.0,
-                    crossAxisSpacing: 10.0,
+                    mainAxisSpacing: 15,
+                    crossAxisSpacing: 15,
                   ),
                   itemBuilder: (context, index) {
                     var data = buildGridHelper[index];
-                    return BuildGrid(
-                      imageUrl: data.imageUrl,
-                      title: data.title,
-                      pathToPush: data.routeToPush,
+                    return AnimationConfiguration.staggeredGrid(
+                      position: index,
+                      duration: const Duration(milliseconds: 400),
+                      columnCount: 3,
+                      child: ScaleAnimation(
+                        child: FadeInAnimation(
+                          child: BuildGrid(
+                            imageUrl: data.imageUrl,
+                            title: data.title,
+                            pathToPush: data.routeToPush,
+                          ),
+                        ),
+                      ),
                     );
                   }),
             )
@@ -299,14 +252,7 @@ class BuildGrid extends StatelessWidget {
         Navigator.push(
             context, MaterialPageRoute(builder: (context) => pathToPush));
       },
-      child: Container(
-        padding: const EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: AppColors.primary,
-            width: 1.0,
-          ),
-        ),
+      child: Neumorphic(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,

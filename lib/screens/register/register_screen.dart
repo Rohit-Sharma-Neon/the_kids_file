@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
-import 'package:school_project/common_widgets/custom_button.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
+import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/common_widgets/text_style.dart';
 import 'package:school_project/screens/register/otp_verification_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
@@ -14,6 +15,7 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final PageController _controller = PageController();
+  final TextEditingController mobileController = TextEditingController();
   final List<OnBoarding> _onBoarding = [
     const OnBoarding(
         imageUrl: 'assets/images/paymentInformation.png',
@@ -46,9 +48,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: NeumorphicColors.background,
-      appBar: NeumorphicAppBar(title: const Text("Enter your Mobile",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),centerTitle: true,automaticallyImplyLeading: false,
-          leading: NeumorphicBackButton(onPressed: (){Navigator.pop(context);},style: const NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(),depth: 10))),
+      backgroundColor: AppColors.primaryColor,
+      appBar: const BaseAppBar(title: "Enter Your Mobile"),
       body: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -73,105 +74,81 @@ class _RegisterScreenState extends State<RegisterScreen> {
           //     ),
           //   ),
           // ),
-          SizedBox(height: 60),
+          const SizedBox(height: 60),
           Container(
             margin: const EdgeInsets.all(25.0),
             child: Column(
               children: [
-                SizedBox(
-                  child: Text(
-                    _onBoarding[0].title,
-                    style: titleTextStyle,
-                  ),
-                ),
-                const SizedBox(height: 15),
-                SizedBox(
-                  child: Text(
-                    _onBoarding[0].description,
-                    style: descriptionTextStyle,
-                    textAlign: TextAlign.center,
-                  ),
-                ),
+                // SizedBox(
+                //   child: Text(
+                //     _onBoarding[0].title,
+                //     style: titleTextStyle,
+                //   ),
+                // ),
+                // const SizedBox(height: 15),
+                // SizedBox(
+                //   child: Text(
+                //     _onBoarding[0].description,
+                //     style: descriptionTextStyle,
+                //     textAlign: TextAlign.center,
+                //   ),
+                // ),
                 const SizedBox(height: 60),
-                Container(
-                  height: 54.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(50.0),
-                    border: Border.all(
-                      color: AppColors.primary,
-                      width: 2.0,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Image.asset(
-                          'assets/images/countryFlag.png',
-                          fit: BoxFit.fill,
-                        ),
-                        const SizedBox(
-                          width: 8.0,
-                        ),
-                        const Text(
-                          '+91',
-                          style: TextStyle(
-                            color: Colors.black,
-                            fontSize: 15.0,
+                Neumorphic(
+                  style: const NeumorphicStyle(depth: -8),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: TextFormField(
+                    autofocus: true,
+                    controller: mobileController,
+                    maxLength: 10,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      border: InputBorder.none,
+                      counter: const SizedBox.shrink(),
+                      counterText: "",
+                      counterStyle: const TextStyle(fontSize: 0),
+                      prefix: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Image.asset(
+                            'assets/images/countryFlag.png',
+                            fit: BoxFit.fill,
+                            width: 30,
                           ),
-                        ),
-                        const SizedBox(
-                          width: 7.0,
-                        ),
-                        Expanded(
-                          child: TextFormField(
-                            autofocus: true,
-                            keyboardType: TextInputType.number,
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: 'Enter Mobile Number',
-                              hintStyle: TextStyle(
-                                color: Color(0xFF807E86),
+                          const SizedBox(
+                            width: 8.0,
+                          ),
+                          const Padding(
+                            padding: EdgeInsets.only(right: 10),
+                            child: Text(
+                              '+91',
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 15.0,
                               ),
                             ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
+                      hintText: 'Enter Mobile Number',
+                      hintStyle: const TextStyle(
+                        color: Color(0xFF807E86),
+                      ),
                     ),
                   ),
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                CustomButton(
+                PrimaryButton(
+                  isAnimate: true,
+                  margin: const EdgeInsets.only(top: 60),
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const OtpVerificationScreen(),
+                        builder: (context) => OtpVerificationScreen(mobileNumber: mobileController.text.trim()),
                       ),
                     );
                   },
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        'Next',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          color: Colors.white,
-                        ),
-                      ),
-                      SizedBox(
-                        width: 10.0,
-                      ),
-                      Icon(
-                        Icons.arrow_forward,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
+                  title: 'Next',
                 ),
               ],
             ),

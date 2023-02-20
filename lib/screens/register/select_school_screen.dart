@@ -1,6 +1,9 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/screens/register/register_screen.dart';
+import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/sizes.dart';
 
 class SelectSchoolScreen extends StatefulWidget {
   const SelectSchoolScreen({Key? key}) : super(key: key);
@@ -14,7 +17,7 @@ class _SelectSchoolScreenState extends State<SelectSchoolScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: NeumorphicColors.background,
+      backgroundColor: AppColors.primaryColor,
       appBar: NeumorphicAppBar(title: const Text("Select School",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),centerTitle: true,automaticallyImplyLeading: false,),
       body: Center(
         child: Neumorphic(
@@ -22,6 +25,7 @@ class _SelectSchoolScreenState extends State<SelectSchoolScreen> {
           margin: const EdgeInsets.symmetric(horizontal: 20),
           child: DropdownButton(
             isExpanded: true,
+            dropdownColor: AppColors.primaryColor,
             alignment: Alignment.center,
             underline: const SizedBox(),
             hint: _dropDownValue.isEmpty
@@ -47,16 +51,17 @@ class _SelectSchoolScreenState extends State<SelectSchoolScreen> {
           ),
         ),
       ),
-      bottomNavigationBar: NeumorphicButton(
-        margin: const EdgeInsets.only(bottom: 80,right: 20,left: 20),
-        padding: const EdgeInsets.symmetric(vertical: 15),
-        onPressed: (){
+      bottomNavigationBar: PrimaryButton(
+        isAnimate: true,
+        margin: const EdgeInsets.only(bottom: 80,right: scaffoldHorizontalPadding,left: scaffoldHorizontalPadding),
+        onTap: (){
         PersistentNavBarNavigator.pushNewScreen(
           context,
           screen: const RegisterScreen(),
-        );
-      },style: const NeumorphicStyle(color: NeumorphicColors.background),child: const Text("Next",
-        textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16))),
+         );
+       },
+        title: 'Next',
+      ),
     );
   }
 }

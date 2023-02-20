@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:school_project/common_widgets/custom_button.dart';
+import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/screens/dashboard.dart';
 import 'package:school_project/utils/app_colors.dart';
 
@@ -57,7 +57,7 @@ class _ChildDetailScreenState extends State<ChildDetailScreen> {
             margin: const EdgeInsets.only(right: 17.0),
             child: const Icon(
               Icons.arrow_back_ios_new,
-              color: AppColors.primary,
+              color: AppColors.primaryColor,
             ),
           ),
         ),
@@ -177,7 +177,7 @@ class _ChildDetailScreenState extends State<ChildDetailScreen> {
           Padding(
             padding:
                 const EdgeInsets.symmetric(horizontal: 25.0, vertical: 39.0),
-            child: CustomButton(
+            child: PrimaryButton(
               onTap: () {
                 Navigator.push(
                   context,
@@ -186,15 +186,7 @@ class _ChildDetailScreenState extends State<ChildDetailScreen> {
                   ),
                 );
               },
-              child: const Center(
-                child: Text(
-                  'Confirm',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 15.0,
-                  ),
-                ),
-              ),
+              title: 'Confirm',
             ),
           )
         ],

@@ -1,7 +1,7 @@
-import 'dart:ui';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class AppColors {
-  static const primary = Color(0xFF800000);
+  static const primaryColor = NeumorphicColors.background;
   static const mainColor = Color(0xfff7cac9);
   static const white = Color(0xffffffff);
   static const grey = Color(0xffbfbfbf);

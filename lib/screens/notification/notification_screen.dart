@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/screens/notification/notification_detail_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/sizes.dart';
 
 class NotificationScreen extends StatefulWidget {
   final String whereToCome;
@@ -12,40 +17,47 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: appBar(),
+      body: AnimationLimiter(
+        child: ListView.builder(
+            physics: const BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+            padding: const EdgeInsets.only(right: scaffoldHorizontalPadding,left: scaffoldHorizontalPadding,top: 20,bottom: 80),
+            itemCount: _notification.length,
+            itemBuilder: (context, index) {
+              var notification = _notification[index];
+              return AnimationConfiguration.staggeredList(
+                position: index,
+                duration: const Duration(milliseconds: 400),
+                child: SlideAnimation(
+                  child: FadeInAnimation(
+                    child: NotificationStyle(
+                        notificationType: notification.notificationType,
+                        notificationTitle: notification.notificationTitle,
+                        notificationMessage: notification.notificationMessage,
+                        isRead: notification.isRead,
+                        createdAt: notification.createdAt),
+                  ),
+                ),
+              );
+            }),
+      ),
+    );
+  }
+
   PreferredSizeWidget appBar() {
-    return AppBar(
-      title: const Text(
-        'Notification',
-        style: TextStyle(
-          color: Colors.black,
-          fontSize: 15.0,
-        ),
-      ),
-      centerTitle: true,
-      automaticallyImplyLeading: false,
-      leading: widget.whereToCome == "NavBar"
-          ? const SizedBox()
-          : GestureDetector(
-        onTap: () {
-          Navigator.pop(context);
-        },
-        child: Container(
-          margin: const EdgeInsets.only(right: 17.0),
-          child: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.primary,
-          ),
-        ),
-      ),
+    return BaseAppBar(
+      title: 'Notification(6)',
       actions: [
         PopupMenuButton(
-          child: Container(
-            margin: const EdgeInsets.only(right: 17.0),
-            child: const Icon(
-              Icons.more_horiz,
-              color: AppColors.primary,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(
+              Radius.circular(10),
             ),
           ),
+          color: AppColors.primaryColor,
           itemBuilder: (BuildContext context) {
             return <PopupMenuItem<String>>[
               const PopupMenuItem<String>(
@@ -62,6 +74,14 @@ class _NotificationScreenState extends State<NotificationScreen> {
               ),
             ];
           },
+          child: SizedBox(
+            child: Neumorphic(
+              child: const Icon(
+                Icons.more_horiz,
+                color: Colors.black,
+              ),
+            ),
+          ),
         ),
       ],
     );
@@ -71,69 +91,46 @@ class _NotificationScreenState extends State<NotificationScreen> {
     NotificationStyle(
         notificationType: 'General',
         notificationTitle: 'Lorem Ipsum is simply',
+        isRead: false,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '23-12-2022 / 04:54 PM'),
     NotificationStyle(
         notificationType: 'Riyansh',
         notificationTitle: 'Pending Fees',
+        isRead: false,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '24-12-2022 / 11:54 AM'),
     NotificationStyle(
         notificationType: 'Divyanshi',
         notificationTitle: 'Payment',
+        isRead: true,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '23-12-2022 / 04:54 PM'),
     NotificationStyle(
         notificationType: 'General',
         notificationTitle: 'Lorem Ipsum is simply',
+        isRead: false,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '24-12-2022 / 11:54 AM'),
     NotificationStyle(
         notificationType: 'Riyansh',
         notificationTitle: 'Pending Fees',
+        isRead: true,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '23-12-2022 / 04:54 PM'),
     NotificationStyle(
         notificationType: 'General',
         notificationTitle: 'Lorem Ipsum is simply',
+        isRead: false,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '23-12-2022 / 04:54 PM'),
   ];
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: appBar(),
-      body: ListView.builder(
-          physics: const BouncingScrollPhysics(
-              parent: AlwaysScrollableScrollPhysics()),
-          itemCount: _notification.length,
-          itemBuilder: (context, index) {
-            var notification = _notification[index];
-            return GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationDetailScreen(),
-                  ),
-                );
-              },
-              child: NotificationStyle(
-                  notificationType: notification.notificationType,
-                  notificationTitle: notification.notificationTitle,
-                  notificationMessage: notification.notificationMessage,
-                  createdAt: notification.createdAt),
-            );
-          }),
-    );
-  }
 }
 
 class NotificationStyle extends StatelessWidget {
@@ -141,6 +138,7 @@ class NotificationStyle extends StatelessWidget {
   final String notificationTitle;
   final String notificationMessage;
   final String createdAt;
+  final bool isRead;
 
   const NotificationStyle({
     Key? key,
@@ -148,86 +146,81 @@ class NotificationStyle extends StatelessWidget {
     required this.notificationTitle,
     required this.notificationMessage,
     required this.createdAt,
+    required this.isRead,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.grey.withOpacity(0.2),
-        borderRadius: BorderRadius.circular(10.0),
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              vertical: 3.0,
-              horizontal: 10.0,
+    return GestureDetector(
+      onTap: (){
+        PersistentNavBarNavigator.pushNewScreen(context, screen: const NotificationDetailScreen());
+
+      },
+      child: Neumorphic(
+        margin: const EdgeInsets.symmetric(vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 12,vertical: 10),
+        style: NeumorphicStyle(depth: isRead ? -10 : 8),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            // Container(
+            //   decoration: BoxDecoration(
+            //       border: Border.all(
+            //         color: AppColors.primaryColor,
+            //         width: 1.0,
+            //       ),
+            //       borderRadius: BorderRadius.circular(25.0)),
+            //   child: Text(
+            //     notificationType,
+            //     style: const TextStyle(color: AppColors.primaryColor, fontSize: 10.0),
+            //   ),
+            // ),
+            Text(
+              notificationTitle,
+              style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
             ),
-            decoration: BoxDecoration(
-                border: Border.all(
-                  color: AppColors.primary,
-                  width: 1.0,
-                ),
-                borderRadius: BorderRadius.circular(25.0)),
-            child: Text(
-              notificationType,
-              style: const TextStyle(color: AppColors.primary, fontSize: 10.0),
+            const SizedBox(
+              height: 5.0,
             ),
-          ),
-          const SizedBox(
-            height: 5.0,
-          ),
-          Text(
-            notificationTitle,
-            style: const TextStyle(fontSize: 17.0, fontWeight: FontWeight.w600),
-          ),
-          const SizedBox(
-            height: 5.0,
-          ),
-          Text(
-            notificationMessage,
-            softWrap: true,
-            overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              fontSize: 12.0,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
-          const SizedBox(
-            height: 2.0,
-          ),
-          Row(
-            children: [
-              Text(
-                createdAt,
-                style: const TextStyle(
-                  color: AppColors.lightBlack,
-                ),
+            Text(
+              notificationMessage,
+              softWrap: true,
+              overflow: TextOverflow.ellipsis,
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w400,
               ),
-              const Spacer(),
-              Container(
-                padding: const EdgeInsets.all(5.0),
-                decoration: const BoxDecoration(
-                  color: AppColors.primary,
-                  shape: BoxShape.circle,
+            ),
+            const SizedBox(
+              height: 2.0,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  createdAt,
+                  style: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 11,
+                  ),
                 ),
-                child: const Icon(
-                  Icons.delete,
-                  color: AppColors.pageBgColor,
+                GestureDetector(
+                  onTap: (){},
+                  child: Neumorphic(
+                    padding: const EdgeInsets.all(4),
+                    child: const Icon(
+                      Icons.delete,
+                      color: Colors.black,
+                      size: 18,
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(
-            height: 10.0,
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

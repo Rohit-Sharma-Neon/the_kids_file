@@ -3,6 +3,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:school_project/screens/dashboard.dart';
+import 'package:school_project/screens/gallery/gallery_screen.dart';
+import 'package:school_project/screens/home_screen/home_screen.dart';
+import 'package:school_project/screens/profile/my_account_screen.dart';
 
 void main() {
   runApp(const MyApp());

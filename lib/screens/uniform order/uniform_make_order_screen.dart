@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:school_project/common_widgets/custom_button.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:school_project/common_widgets/animated_list_view_builder.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
+import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/sizes.dart';
 
 class UniformMakeOrderScreen extends StatefulWidget {
   const UniformMakeOrderScreen({Key? key}) : super(key: key);
@@ -93,251 +98,174 @@ class _UniformMakeOrderScreenState extends State<UniformMakeOrderScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Uniform make order',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 15.0,
-          ),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 17.0),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Stack(
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(bottom: 90.0),
-              child: ListView.builder(
-                itemCount: uniformList.length,
-                itemBuilder: (context, index) {
-                  final uniformData = uniformList[index];
-
-                  return Column(
-                    children: [
-                      InkWell(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: uniformData['selected'] == true
-                                ? Border.all(color: AppColors.primary, width: 1)
-                                : null,
-                            boxShadow: const <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 6.0,
-                                  offset: Offset(0.0, 3))
+      appBar: const BaseAppBar(title: "Uniform Make Order"),
+      extendBody: true,
+      body: AnimationLimiter(
+        child: ListView.builder(
+          padding: const EdgeInsets.only(bottom: 90.0,top: 15,left: scaffoldHorizontalPadding,right: scaffoldHorizontalPadding),
+          itemCount: uniformList.length,
+          physics: const BouncingScrollPhysics(),
+          itemBuilder: (context, index) {
+            final uniformData = uniformList[index];
+            return AnimatedListViewBuilder(
+              index: index,
+              child: Neumorphic(
+                padding: const EdgeInsets.all(8.0),
+                margin: const EdgeInsets.only(bottom: 15),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const CircleAvatar(
+                          radius: 20,
+                          backgroundColor: Colors.grey,
+                        ),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(child: Text(uniformData['name'])),
+                        Text(
+                            '₹ ${uniformData['singleQtyPrice'].toString()}'),
+                        NeumorphicCheckbox(
+                            value: uniformData['selected'],
+                            margin: const EdgeInsets.only(left: 10),
+                            onChanged: (value) {
+                              setState(() {
+                                uniformData['selected'] =
+                                    !uniformData['selected'];
+                                totalPrice();
+                              });
+                            }),
+                      ],
+                    ),
+                    const Divider(thickness: 1, color: Colors.grey),
+                    Row(
+                      children: [
+                        const Text('QTY : '),
+                        const SizedBox(
+                          width: 10,
+                        ),
+                        Expanded(
+                          child: Row(
+                            children: [
+                              InkWell(
+                                onTap: () {
+                                  if (uniformData['qty'] != 0) {
+                                    setState(() {
+                                      uniformData['qty'] -= 1;
+                                      uniformPriceCalculation(
+                                          index: index,
+                                          qty: uniformData['qty']);
+                                      calculatePriceWithUniform(
+                                        index: index,
+                                        reduce: true,
+                                      );
+                                    });
+                                  }
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius:
+                                          BorderRadius.circular(5),
+                                    ),
+                                    child: const Icon(
+                                      Icons.remove,
+                                      color: Colors.white,
+                                    )),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Text(uniformData['qty'].toString()),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    uniformData['qty'] += 1;
+                                    uniformPriceCalculation(
+                                        index: index,
+                                        qty: uniformData['qty']);
+                                    calculatePriceWithUniform(
+                                      index: index,
+                                    );
+                                  });
+                                },
+                                child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius:
+                                          BorderRadius.circular(5),
+                                    ),
+                                    child: const Icon(
+                                      Icons.add,
+                                      color: Colors.white,
+                                    )),
+                              ),
                             ],
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor: Colors.grey,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(child: Text(uniformData['name'])),
-                                    Text(
-                                        '₹ ${uniformData['singleQtyPrice'].toString()}'),
-                                    Checkbox(
-                                        activeColor: AppColors.primary,
-                                        value: uniformData['selected'],
-                                        onChanged: (value) {
-                                          setState(() {
-                                            uniformData['selected'] =
-                                                !uniformData['selected'];
-                                            totalPrice();
-                                          });
-                                        }),
-                                  ],
-                                ),
-                                const Divider(thickness: 1, color: Colors.grey),
-                                Row(
-                                  children: [
-                                    const Text('QTY : '),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(
-                                      child: Row(
-                                        children: [
-                                          InkWell(
-                                            onTap: () {
-                                              if (uniformData['qty'] != 0) {
-                                                setState(() {
-                                                  uniformData['qty'] -= 1;
-                                                  uniformPriceCalculation(
-                                                      index: index,
-                                                      qty: uniformData['qty']);
-                                                  calculatePriceWithUniform(
-                                                    index: index,
-                                                    reduce: true,
-                                                  );
-                                                });
-                                              }
-                                            },
-                                            child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.remove,
-                                                  color: Colors.white,
-                                                )),
-                                          ),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          Text(uniformData['qty'].toString()),
-                                          const SizedBox(
-                                            width: 10,
-                                          ),
-                                          InkWell(
-                                            onTap: () {
-                                              setState(() {
-                                                uniformData['qty'] += 1;
-                                                uniformPriceCalculation(
-                                                    index: index,
-                                                    qty: uniformData['qty']);
-                                                calculatePriceWithUniform(
-                                                  index: index,
-                                                );
-                                              });
-                                            },
-                                            child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey,
-                                                  borderRadius:
-                                                      BorderRadius.circular(5),
-                                                ),
-                                                child: const Icon(
-                                                  Icons.add,
-                                                  color: Colors.white,
-                                                )),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Text(
-                                        '₹ ${uniformData['price'].toString()}'),
-                                  ],
-                                ),
-                                const SizedBox(
-                                  height: 20,
-                                ),
-                                if (uniformData['name'] != 'Tie')
-                                  Row(
-                                    children: [
-                                      const Text('Size : '),
-                                      const SizedBox(
-                                        width: 10,
-                                      ),
-                                      Container(
-                                          height: 30,
-                                          width: 120,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  width: 1, color: Colors.grey),
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              color: Colors.white),
-                                          padding: const EdgeInsets.symmetric(
-                                              horizontal: 24, vertical: 0),
-                                          child: DropdownButton(
-                                            isExpanded: true,
-                                            underline: Container(),
-                                            hint: const Center(
-                                                child: Text('Size')),
-                                            onChanged: (newValue) {
-                                              setState(() {
-                                                uniformData['selectedSize'] =
-                                                    newValue.toString();
-                                              });
-                                            },
-                                            value: uniformData['selectedSize'],
-                                            items: uniformData['size']
-                                                .map<DropdownMenuItem<String>>(
-                                                    (classes) {
-                                              return DropdownMenuItem(
-                                                value: classes.toString(),
-                                                child: Text(
-                                                  classes.toString(),
-                                                ),
-                                              );
-                                            }).toList(),
-                                          )),
-                                    ],
-                                  ),
-                              ],
-                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-            Positioned(
-              bottom: 10,
-              left: 0,
-              right: 0,
-              child: CustomButton(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        child: Center(
-                          child: Text(
-                            'Checkout',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 15.0,
-                            ),
+                        Text(
+                            '₹ ${uniformData['price'].toString()}'),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    if (uniformData['name'] != 'Tie')
+                      Row(
+                        children: [
+                          const Text('Size : '),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
+                          SizedBox(
+                            width: 130,
+                            height: 35,
+                            child: Neumorphic(
+                                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 0),
+                                child: DropdownButton(
+                                  isExpanded: true,
+                                  dropdownColor: AppColors.primaryColor,
+                                  underline: Container(),
+                                  hint: const Center(
+                                      child: Text('Size')),
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      uniformData['selectedSize'] =
+                                          newValue.toString();
+                                    });
+                                  },
+                                  value: uniformData['selectedSize'],
+                                  items: uniformData['size']
+                                      .map<DropdownMenuItem<String>>(
+                                          (classes) {
+                                    return DropdownMenuItem(
+                                      value: classes.toString(),
+                                      child: Text(
+                                        classes.toString(),
+                                      ),
+                                    );
+                                  }).toList(),
+                                )),
+                          ),
+                        ],
                       ),
-                      Text('₹ ${finalPrice.toString()}',
-                          style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white)),
-                    ],
-                  ),
+                  ],
                 ),
               ),
-            ),
-          ],
+            );
+          },
         ),
+      ),
+      bottomNavigationBar: PrimaryButton(
+        margin: const EdgeInsets.only(bottom: primaryButtonBottomMargin,left: scaffoldHorizontalPadding,right: scaffoldHorizontalPadding),
+        isAnimate: true,
+        onTap: () {},
+        title: 'Checkout',
       ),
     );
   }

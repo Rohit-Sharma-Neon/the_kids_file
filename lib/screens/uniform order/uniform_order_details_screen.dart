@@ -1,5 +1,11 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:school_project/common_widgets/animated_list_view_builder.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/sizes.dart';
 
 class UniformOrderDetailsScreen extends StatefulWidget {
   const UniformOrderDetailsScreen({Key? key}) : super(key: key);
@@ -51,108 +57,67 @@ class _UniformOrderDetailsScreenState extends State<UniformOrderDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text(
-          'Order Details',
-          style: TextStyle(
-            color: Colors.black,
-            fontSize: 15.0,
-          ),
-        ),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        leading: GestureDetector(
-          onTap: () {
-            Navigator.pop(context);
-          },
-          child: Container(
-            margin: const EdgeInsets.only(right: 17.0),
-            child: const Icon(
-              Icons.arrow_back_ios_new,
-              color: AppColors.primary,
-            ),
-          ),
-        ),
-      ),
+      appBar: const BaseAppBar(title: "Order Details"),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ListView.builder(
-                itemCount: orderDataList.length,
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemBuilder: (context, index) {
-                  final orderdata = orderDataList[index];
-                  return Column(
+        padding: const EdgeInsets.all(20.0),
+        child: AnimationLimiter(
+          child: ListView.builder(
+            itemCount: orderDataList.length,
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemBuilder: (context, index) {
+              final orderdata = orderDataList[index];
+              return AnimatedListViewBuilder(
+                index: index,
+                child: Neumorphic(
+                  padding: const EdgeInsets.all(8.0),
+                  margin: const EdgeInsets.only(bottom: 10),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      InkWell(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            boxShadow: const <BoxShadow>[
-                              BoxShadow(
-                                  color: Colors.grey,
-                                  blurRadius: 6.0,
-                                  offset: Offset(0.0, 3))
-                            ],
-                            borderRadius: BorderRadius.circular(10),
+                      Row(
+                        children: [
+                          const CircleAvatar(
+                            radius: 20,
+                            backgroundColor: Colors.grey,
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  children: [
-                                    const CircleAvatar(
-                                      radius: 20,
-                                      backgroundColor: Colors.grey,
-                                    ),
-                                    const SizedBox(
-                                      width: 10,
-                                    ),
-                                    Expanded(child: Text(orderdata['name'])),
-                                    Text(
-                                        '${orderdata['qty'].toString()} *  ${orderdata['singlePrice'].toString()} ='),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text('₹ ${orderdata['price'].toString()}'),
-                                  ],
-                                ),
-                                Divider(
-                                  thickness: 1,
-                                  color: Colors.grey,
-                                ),
-                                Row(
-                                  children: [
-                                    Text('size'),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text('${orderdata['size'].toString()}'),
-                                  ],
-                                ),
-                              ],
-                            ),
+                          const SizedBox(
+                            width: 10,
                           ),
-                        ),
+                          Expanded(child: Text(orderdata['name'])),
+                          Text(
+                              '${orderdata['qty'].toString()} *  ${orderdata['singlePrice'].toString()} ='),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text('₹ ${orderdata['price'].toString()}'),
+                        ],
                       ),
-                      SizedBox(height: 20),
+                      const Divider(
+                        thickness: 1,
+                        color: Colors.grey,
+                      ),
+                      Row(
+                        children: [
+                          const Text('size'),
+                          const SizedBox(
+                            width: 5,
+                          ),
+                          Text('${orderdata['size'].toString()}'),
+                        ],
+                      ),
                     ],
-                  );
-                },
-              ),
-              const SizedBox(height: 30),
-              Text('Total : ${bookTotal}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            ],
+                  ),
+                ),
+              );
+            },
           ),
         ),
       ),
+      bottomNavigationBar: FadeInUp(child: Padding(
+        padding: const EdgeInsets.only(bottom: 70,left: scaffoldHorizontalPadding,right: scaffoldHorizontalPadding),
+        child: Text('Total : $bookTotal', style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+      )),
     );
   }
 }

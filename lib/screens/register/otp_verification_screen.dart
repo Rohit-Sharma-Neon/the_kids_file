@@ -1,34 +1,48 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
-import 'package:school_project/common_widgets/custom_button.dart';
-import 'package:school_project/screens/dashboard.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
+import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/screens/home_screen/home_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  const OtpVerificationScreen({Key? key}) : super(key: key);
+  final String mobileNumber;
+  const OtpVerificationScreen({Key? key, required this.mobileNumber}) : super(key: key);
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  final TextEditingController _pinController = TextEditingController();
+  TextEditingController _pinController = TextEditingController();
+
+  Timer? _timer;
+  int _start = 60;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_){
+        startTimer();
+    });
+    super.initState();
+  }
+
   @override
   void dispose() {
     _pinController.dispose();
+    _timer?.cancel();
     super.dispose();
 
   }
 
   @override
   Widget build(BuildContext context) {
-    var _size = MediaQuery.of(context).size;
     return Scaffold(
-      backgroundColor: NeumorphicColors.background,
-      appBar: NeumorphicAppBar(title: const Text("Verify Your Number",style: TextStyle(fontSize: 16,fontWeight: FontWeight.bold)),centerTitle: true,automaticallyImplyLeading: false,
-          leading: NeumorphicBackButton(onPressed: (){Navigator.pop(context);},style: const NeumorphicStyle(boxShape: NeumorphicBoxShape.circle(),depth: 10))),
+      backgroundColor: AppColors.primaryColor,
+      appBar: const BaseAppBar(title: "Verify Your Number"),
       body: ListView(
         physics: const BouncingScrollPhysics(
             parent: AlwaysScrollableScrollPhysics()),
@@ -37,19 +51,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           vertical: 39.0,
         ),
         children: [
-          // Container(
-          //   width: _size.width,
-          //   height: _size.height * 0.4,
-          //   child: Image.asset(
-          //     'assets/images/otpVerificationImg.png',
-          //     // fit: BoxFit.cover,
-          //   ),
-          // ),
           const SizedBox(
             height: 40.0,
           ),
           Container(
-            // width: 167.0,
             height: 24.0,
             margin: const EdgeInsets.symmetric(horizontal: 46.0),
             child: const Text(
@@ -66,9 +71,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             margin: const EdgeInsets.symmetric(horizontal: 46.0),
             child: Row(
               children: [
-                const Text(
-                  'sent to +91- 8527866764',
-                  style: TextStyle(
+                Text(
+                  'sent to +91- ${widget.mobileNumber}',
+                  style: const TextStyle(
                     fontSize: 13.0,
                   ),
                 ),
@@ -83,7 +88,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     'Edit',
                     style: TextStyle(
                       fontSize: 13.0,
-                      color: AppColors.primary,
+                      color: AppColors.primaryColor,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -97,9 +102,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             child: PinCodeTextField(
                 keyboardType: TextInputType.phone,
                 autoFocus: true,
+                autoDisposeControllers: false,
                 pinTheme: PinTheme(
                   inactiveColor: Colors.grey,
-                  selectedColor: AppColors.primary,
+                  selectedColor: AppColors.primaryColor,
                 ),
                 controller: _pinController,
                 cursorColor: Colors.black,
@@ -112,9 +118,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 46.0),
-            child: const Text(
-              'Auto detecting the code 00:25 seconds',
-              style: TextStyle(
+            child: Text(
+              'Auto detecting the code 00:${_start.toString()} seconds',
+              style: const TextStyle(
                 fontSize: 12.0,
               ),
             ),
@@ -123,7 +129,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             height: 20.0,
           ),
           GestureDetector(
-            onTap: () {},
+            onTap: () {
+              _timer?.cancel();
+              _start = 60;
+              startTimer();
+            },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 46.0),
               child: const Text(
@@ -135,14 +145,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           const SizedBox(
             height: 70.0,
           ),
-          CustomButton(
+          PrimaryButton(
+            isAnimate: true,
             onTap: () {
-              /* Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ChildDetailScreen(),
-                ),
-              );*/
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
@@ -150,18 +155,23 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 ),
               );
             },
-            child: const Center(
-              child: Text(
-                'Confirm',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 15.0,
-                ),
-              ),
-            ),
+            title: 'Confirm',
           )
         ],
       ),
     );
+  }
+
+  void startTimer() {
+    const oneSec = Duration(seconds: 1);
+    _timer = Timer.periodic(
+        oneSec,
+            (Timer timer) => setState(() {
+          if (_start == 0) {
+            timer.cancel();
+          } else {
+            _start = _start - 1;
+          }
+        }));
   }
 }

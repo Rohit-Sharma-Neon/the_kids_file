@@ -5,6 +5,7 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
 import 'package:school_project/modals/feed_modal.dart';
 import 'package:school_project/screens/join_now/join_now_screen.dart';
+import 'package:school_project/utils/app_colors.dart';
 import 'package:school_project/utils/app_images.dart';
 import 'package:school_project/utils/app_string.dart';
 import 'package:school_project/common_widgets/feed_item.dart';
@@ -111,7 +112,7 @@ class _FeedsScreenState extends State<FeedsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: NeumorphicColors.background,
+      backgroundColor: AppColors.primaryColor,
       floatingActionButton: NeumorphicButton(
         style: NeumorphicStyle(color: Colors.blue),
           onPressed: (){

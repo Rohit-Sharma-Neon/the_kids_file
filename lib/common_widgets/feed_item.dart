@@ -41,7 +41,7 @@ class _FeedItemState extends State<FeedItem> {
           depth: 5,
           intensity: 5.0,
           lightSource: LightSource.topLeft,
-          color: NeumorphicColors.background),
+          color: AppColors.primaryColor),
       margin: const EdgeInsets.symmetric(horizontal: 13,vertical: 10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -157,7 +157,7 @@ class _FeedItemState extends State<FeedItem> {
                         padding: const EdgeInsets.all(6),
                         style: const NeumorphicStyle(
                           shape: NeumorphicShape.concave,
-                          color: NeumorphicColors.background,
+                          color: AppColors.primaryColor,
                           boxShape: NeumorphicBoxShape.circle()
                         ),
                         child: Icon(
@@ -187,7 +187,7 @@ class _FeedItemState extends State<FeedItem> {
                         padding: const EdgeInsets.all(6),
                         style: const NeumorphicStyle(
                             shape: NeumorphicShape.concave,
-                            color: NeumorphicColors.background,
+                            color: AppColors.primaryColor,
                             boxShape: NeumorphicBoxShape.circle()
                         ),
                         child: const Icon(
@@ -220,7 +220,7 @@ class _FeedItemState extends State<FeedItem> {
                     padding: const EdgeInsets.all(6),
                     style: const NeumorphicStyle(
                         shape: NeumorphicShape.concave,
-                        color: NeumorphicColors.background,
+                        color: AppColors.primaryColor,
                         boxShape: NeumorphicBoxShape.circle()
                     ),
                     child: const Icon(
