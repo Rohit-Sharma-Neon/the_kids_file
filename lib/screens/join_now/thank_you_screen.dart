@@ -22,6 +22,7 @@ class _ThankYouScreenState extends State<ThankYouScreen> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
