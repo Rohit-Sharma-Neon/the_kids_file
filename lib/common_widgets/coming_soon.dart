@@ -11,8 +11,11 @@ class ComingSoon extends StatefulWidget {
 class _ComingSoonState extends State<ComingSoon> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: NeumorphicText("Coming Soon",style: NeumorphicStyle(color: Colors.black,depth: 10,intensity: 1.0),
-       textStyle: NeumorphicTextStyle(fontSize: 30,fontWeight: FontWeight.bold),
+    return Scaffold(
+      backgroundColor: NeumorphicColors.background,
+      body: Center(child: NeumorphicText("Coming Soon",style: NeumorphicStyle(color: Colors.black,depth: 10,intensity: 1.0),
+         textStyle: NeumorphicTextStyle(fontSize: 30,fontWeight: FontWeight.bold),
+        ),
       ),
     );
   }

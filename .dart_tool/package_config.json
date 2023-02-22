@@ -44,6 +44,18 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "checked_yaml",
+      "rootUri": "file:///Users/inventcolabsamit/Documents/FlutterVersions/flutter3.3.10/.pub-cache/hosted/pub.dartlang.org/checked_yaml-2.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
+      "name": "cli_util",
+      "rootUri": "file:///Users/inventcolabsamit/Documents/FlutterVersions/flutter3.3.10/.pub-cache/hosted/pub.dartlang.org/cli_util-0.3.5",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "clock",
       "rootUri": "file:///Users/inventcolabsamit/Documents/FlutterVersions/flutter3.3.10/.pub-cache/hosted/pub.dartlang.org/clock-1.1.1",
       "packageUri": "lib/",
@@ -110,6 +122,12 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "flutter_launcher_icons",
+      "rootUri": "file:///Users/inventcolabsamit/Documents/FlutterVersions/flutter3.3.10/.pub-cache/hosted/pub.dartlang.org/flutter_launcher_icons-0.11.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "flutter_lints",
       "rootUri": "file:///Users/inventcolabsamit/Documents/FlutterVersions/flutter3.3.10/.pub-cache/hosted/pub.dartlang.org/flutter_lints-2.0.1",
       "packageUri": "lib/",
@@ -174,6 +192,12 @@
       "rootUri": "file:///Users/inventcolabsamit/Documents/FlutterVersions/flutter3.3.10/.pub-cache/hosted/pub.dartlang.org/js-0.6.4",
       "packageUri": "lib/",
       "languageVersion": "2.16"
+    },
+    {
+      "name": "json_annotation",
+      "rootUri": "file:///Users/inventcolabsamit/Documents/FlutterVersions/flutter3.3.10/.pub-cache/hosted/pub.dartlang.org/json_annotation-4.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
     },
     {
       "name": "lint",
@@ -494,7 +518,7 @@
       "languageVersion": "2.17"
     }
   ],
-  "generated": "2023-02-20T05:20:19.461822Z",
+  "generated": "2023-02-21T13:19:08.337174Z",
   "generator": "pub",
   "generatorVersion": "2.18.6"
 }

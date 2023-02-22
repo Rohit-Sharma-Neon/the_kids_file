@@ -33,7 +33,7 @@ class PrimaryButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(title, textAlign: TextAlign.center,style: TextStyle(fontWeight: FontWeight.w500,fontSize: 16)),
+            Text(title, textAlign: TextAlign.center,style: const TextStyle(fontWeight: FontWeight.w500,fontSize: 16)),
           ],
         ),
       ),

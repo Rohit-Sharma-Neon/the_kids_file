@@ -3,9 +3,8 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:school_project/common_widgets/animated_list_view_builder.dart';
 import 'package:school_project/common_widgets/base_app_bar.dart';
-import 'package:school_project/common_widgets/primary_button.dart';
+import 'package:school_project/screens/my_account/my_account_screen.dart';
 import 'package:school_project/screens/notification/notification_screen.dart';
-import 'package:school_project/screens/profile/my_account_screen.dart';
 import 'package:school_project/utils/sizes.dart';
 
 import '../../utils/app_colors.dart';

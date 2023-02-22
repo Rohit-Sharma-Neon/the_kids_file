@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:school_project/common_widgets/animated_column.dart';
 import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/screens/home_screen/home_screen.dart';
@@ -43,9 +44,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       appBar: const BaseAppBar(title: "Verify Your Number"),
-      body: ListView(
-        physics: const BouncingScrollPhysics(
-            parent: AlwaysScrollableScrollPhysics()),
+      body: AnimatedColumn(
+        crossAxisAlignment: CrossAxisAlignment.start,
         padding: const EdgeInsets.symmetric(
           horizontal: 25.0,
           vertical: 39.0,

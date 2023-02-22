@@ -5,7 +5,8 @@ import 'package:school_project/utils/app_colors.dart';
 import 'package:school_project/utils/sizes.dart';
 
 class NotificationDetailScreen extends StatelessWidget {
-  const NotificationDetailScreen({Key? key}) : super(key: key);
+  final String title;
+  const NotificationDetailScreen({Key? key, required this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -18,9 +19,9 @@ class NotificationDetailScreen extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Lorem Ipsum is simply',
-            style: TextStyle(
+          Text(
+            title,
+            style: const TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w500,
             ),

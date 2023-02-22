@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:school_project/common_widgets/animated_column.dart';
 import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/common_widgets/text_style.dart';
@@ -50,49 +51,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       appBar: const BaseAppBar(title: "Enter Your Mobile"),
-      body: Column(
+      body: AnimatedColumn(
         mainAxisSize: MainAxisSize.min,
         children: [
-          // Row(
-          //   mainAxisAlignment: MainAxisAlignment.center,
-          //   crossAxisAlignment: CrossAxisAlignment.center,
-          //   children: List.generate(
-          //     _onBoarding.length,
-          //         (index) => AnimatedContainer(
-          //       padding: const EdgeInsets.all(2.0),
-          //       duration: const Duration(milliseconds: 300),
-          //       child: Container(
-          //         height: 5.0,
-          //         width: 5.0,
-          //         decoration: BoxDecoration(
-          //           color: currentIndex == index
-          //               ? AppColors.primary
-          //               : Colors.grey.shade700,
-          //           borderRadius: BorderRadius.circular(3.0),
-          //         ),
-          //       ),
-          //     ),
-          //   ),
-          // ),
           const SizedBox(height: 60),
           Container(
             margin: const EdgeInsets.all(25.0),
             child: Column(
               children: [
-                // SizedBox(
-                //   child: Text(
-                //     _onBoarding[0].title,
-                //     style: titleTextStyle,
-                //   ),
-                // ),
-                // const SizedBox(height: 15),
-                // SizedBox(
-                //   child: Text(
-                //     _onBoarding[0].description,
-                //     style: descriptionTextStyle,
-                //     textAlign: TextAlign.center,
-                //   ),
-                // ),
                 const SizedBox(height: 60),
                 Neumorphic(
                   style: const NeumorphicStyle(depth: -8),
