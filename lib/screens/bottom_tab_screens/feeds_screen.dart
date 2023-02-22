@@ -114,7 +114,7 @@ class _FeedsScreenState extends State<FeedsScreen> {
     return Scaffold(
       backgroundColor: AppColors.primaryColor,
       floatingActionButton: NeumorphicButton(
-        style: NeumorphicStyle(color: Colors.blue),
+        style: const NeumorphicStyle(color: Colors.blue),
           onPressed: (){
         Navigator.push(context, MaterialPageRoute(builder: (context)=> const JoinNowScreen()));
       },margin: const EdgeInsets.only(bottom: 30,right: 5),

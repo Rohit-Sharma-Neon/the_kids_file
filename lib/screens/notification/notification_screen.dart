@@ -92,8 +92,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
         notificationType: 'General',
         notificationTitle: 'Lorem Ipsum is simply',
         isRead: false,
-        notificationMessage:
-        'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
+        notificationMessage: 'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '23-12-2022 / 04:54 PM'),
     NotificationStyle(
         notificationType: 'Riyansh',
@@ -111,21 +110,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
         createdAt: '23-12-2022 / 04:54 PM'),
     NotificationStyle(
         notificationType: 'General',
-        notificationTitle: 'Lorem Ipsum is simply',
+        notificationTitle: 'Attendance',
         isRead: false,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '24-12-2022 / 11:54 AM'),
     NotificationStyle(
         notificationType: 'Riyansh',
-        notificationTitle: 'Pending Fees',
+        notificationTitle: 'Fees Submitted',
         isRead: true,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
         createdAt: '23-12-2022 / 04:54 PM'),
     NotificationStyle(
         notificationType: 'General',
-        notificationTitle: 'Lorem Ipsum is simply',
+        notificationTitle: 'Absent',
         isRead: false,
         notificationMessage:
         'Lorem Ipsum is simply dummy text of the printing andtypesetting industry. Lorem Ipsum is simply dummy...',
@@ -153,8 +152,7 @@ class NotificationStyle extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: (){
-        PersistentNavBarNavigator.pushNewScreen(context, screen: const NotificationDetailScreen());
-
+        PersistentNavBarNavigator.pushNewScreen(context, screen: NotificationDetailScreen(title: notificationTitle,));
       },
       child: Neumorphic(
         margin: const EdgeInsets.symmetric(vertical: 10),
@@ -165,18 +163,6 @@ class NotificationStyle extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            // Container(
-            //   decoration: BoxDecoration(
-            //       border: Border.all(
-            //         color: AppColors.primaryColor,
-            //         width: 1.0,
-            //       ),
-            //       borderRadius: BorderRadius.circular(25.0)),
-            //   child: Text(
-            //     notificationType,
-            //     style: const TextStyle(color: AppColors.primaryColor, fontSize: 10.0),
-            //   ),
-            // ),
             Text(
               notificationTitle,
               style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
@@ -209,10 +195,11 @@ class NotificationStyle extends StatelessWidget {
                 GestureDetector(
                   onTap: (){},
                   child: Neumorphic(
+                    style: NeumorphicStyle(color: Colors.red.shade300),
                     padding: const EdgeInsets.all(4),
                     child: const Icon(
                       Icons.delete,
-                      color: Colors.black,
+                      color: Colors.white,
                       size: 18,
                     ),
                   ),

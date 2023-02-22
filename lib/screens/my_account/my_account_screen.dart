@@ -5,8 +5,8 @@ import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
 import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/screens/books%20order/books_order_screen.dart';
 import 'package:school_project/screens/gallery/gallery_screen.dart';
+import 'package:school_project/screens/my_account/payment_summary_screen.dart';
 import 'package:school_project/screens/no_route.dart';
-import 'package:school_project/screens/profile/payment_summary_screen.dart';
 import 'package:school_project/screens/trackChild/track_child_screen.dart';
 import 'package:school_project/screens/uniform%20order/uniform_order_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
@@ -224,7 +224,8 @@ class _MyAccountScreenState extends State<MyAccountScreen> {
                         ),
                       ),
                     );
-                  }),
+                  },
+              ),
             )
           ],
         ),

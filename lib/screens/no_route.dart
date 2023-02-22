@@ -24,6 +24,7 @@ class _NoRouteState extends State<NoRoute> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: NeumorphicColors.background,
       appBar: appBar(widget.title),
       body: FadeInUp(
         child: Center(
