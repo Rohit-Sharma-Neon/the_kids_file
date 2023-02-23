@@ -7,4 +7,5 @@ class AppImages {
   static const s6 = 'assets/images/dummy_home_banner.jpeg';
   static const s7 = 'assets/images/dummy_home_banner.jpeg';
   static const appIcon = 'assets/images/app_icon.png';
+  static const football = 'assets/images/football.png';
 }
