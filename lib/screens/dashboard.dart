@@ -6,7 +6,7 @@ import 'package:school_project/screens/bottom_tab_screens/feeds_screen.dart';
 import 'package:school_project/screens/bottom_tab_screens/global_notification_screen.dart';
 import 'package:school_project/screens/bottom_tab_screens/profile_screen.dart';
 import 'package:school_project/screens/bottom_tab_screens/select_school_screen.dart';
-import 'package:school_project/screens/quiz_screen.dart';
+import 'package:school_project/screens/quiz_screens/quiz_screen.dart';
 
 import '../utils/app_colors.dart';
 

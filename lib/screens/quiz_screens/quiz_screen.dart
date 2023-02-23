@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
-import 'package:school_project/screens/question_answer_screen.dart';
-import 'package:school_project/screens/score_screen.dart';
+import 'package:school_project/screens/quiz_screens/question_answer_screen.dart';
+import 'package:school_project/screens/quiz_screens/score_screen.dart';
 import 'package:school_project/utils/app_images.dart';
 import 'package:school_project/utils/helper_methods.dart';
 

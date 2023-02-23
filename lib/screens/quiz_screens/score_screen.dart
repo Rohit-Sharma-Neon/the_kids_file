@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:school_project/utils/helper_methods.dart';
 
-import '../common_widgets/text_widget.dart';
+import '../../common_widgets/text_widget.dart';
 
 class ScoreScreen extends StatefulWidget {
   const ScoreScreen({Key? key}) : super(key: key);
