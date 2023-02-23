@@ -34,10 +34,6 @@ class _DashBoardScreenState extends State<DashBoardScreen> {
       const SelectSchoolScreen(),
       const GlobalNotificationScreen(),
       const ProfileScreen(),
-      // const QuizScreen(),
-      // const RegisterScreen(),
-      // const NotificationScreen(),
-      // const ProfileScreen(),
     ];
   }
 
