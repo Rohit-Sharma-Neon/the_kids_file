@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:provider/provider.dart';
+import 'package:school_project/common_widgets/base_app_bar.dart';
+import 'package:school_project/common_widgets/base_loading.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
-import 'package:school_project/modals/feed_modal.dart';
+import 'package:school_project/api_services/custom_model/feed_modal.dart';
+import 'package:school_project/providers/dashboard_provider.dart';
+import 'package:school_project/providers/feed_provider.dart';
 import 'package:school_project/screens/join_now/join_now_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
 import 'package:school_project/utils/app_images.dart';
@@ -18,150 +23,54 @@ class FeedsScreen extends StatefulWidget {
 }
 
 class _FeedsScreenState extends State<FeedsScreen> {
-  List<FeedModal> dashBoardData = [
-    FeedModal(
-      'Banyan School',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s1,
-        AppImages.s2,
-        AppImages.s3,
-      ],
-    ),
-    FeedModal(
-      'Cambridge Court School',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s4,
-        AppImages.s6,
-        AppImages.s7,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s1,
-        AppImages.s2,
-        AppImages.s7,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s3,
-        AppImages.s4,
-        AppImages.s6,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s1,
-        AppImages.s4,
-        AppImages.s6,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s4,
-        AppImages.s6,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s7,
-        AppImages.s1,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s3,
-        AppImages.s4,
-        AppImages.s6,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s1,
-        AppImages.s4,
-        AppImages.s6,
-      ],
-    ),
-    FeedModal(
-      'Ajay Sharma',
-      'ajaysharma@yopmail.com',
-      [
-        AppImages.s2,
-        AppImages.s4,
-        AppImages.s6,
-      ],
-    ),
-  ];
+
+  late FeedProvider feedProvider;
+
+  @override
+  void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      feedProvider = Provider.of<FeedProvider>(context,listen: false);
+      feedProvider.getFeeds();
+    });
+    super.initState();
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      setState(() {});
+      print("Hello");
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: const BaseAppBar(title: appName,leading: SizedBox.shrink()),
       backgroundColor: AppColors.primaryColor,
-      floatingActionButton: NeumorphicButton(
-        style: const NeumorphicStyle(color: Colors.blue),
-          onPressed: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> const JoinNowScreen()));
-      },margin: const EdgeInsets.only(bottom: 30,right: 5),
-          padding: const EdgeInsets.symmetric(vertical: 15,horizontal: 25), child: const Text("Join Now",textAlign: TextAlign.center,
-            style: TextStyle(fontWeight: FontWeight.bold,color: Colors.white))),
-
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(
-              width: double.infinity,
-              height: 40,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  CommonText(
-                    text: appName,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 18,
-                  ),
-                ],
-              ),
-            ),
-
-            Expanded(
-              child: AnimationLimiter(
-                child: ListView.builder(
-                  padding: const EdgeInsets.only(top: 20.0,bottom: 100),
-                  itemBuilder: (context, index) {
-                    return AnimationConfiguration.staggeredList(
-                      position: index,
-                      duration: const Duration(milliseconds: 375),
-                      child: SlideAnimation(
-                        child: FadeInAnimation(
-                          child: FeedItem(
-                            feedData: dashBoardData[index],
-                          ),
-                        ),
+      body: Consumer<FeedProvider>(
+        builder: (BuildContext context, value, Widget? child) {
+          return value.isFeedLoading ? CircularProgressIndicator() : AnimationLimiter(child: ListView.builder(
+              itemCount: value.feedData.length,
+              shrinkWrap: true,
+              padding: const EdgeInsets.only(top: 10,bottom: 100),
+              itemBuilder: (context, index) {
+                return AnimationConfiguration.staggeredList(
+                  position: index,
+                  duration: const Duration(milliseconds: 375),
+                  child: SlideAnimation(
+                    child: FadeInAnimation(
+                      child: FeedItem(
+                        feedData: value.feedData[index],
                       ),
-                    );
-                  },
-                  itemCount: dashBoardData.length,
-                ),
-              ),
+                    ),
+                  ),
+                );
+              },
             ),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

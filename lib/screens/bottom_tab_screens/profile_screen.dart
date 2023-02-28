@@ -1,7 +1,9 @@
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:school_project/common_widgets/animated_column.dart';
 import 'package:school_project/common_widgets/base_app_bar.dart';
+import 'package:school_project/main.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/dialogs.dart';
 import 'package:school_project/utils/sizes.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -51,7 +53,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
         mainAxisSize: MainAxisSize.min,
         children: [
           NeumorphicButton(
-            onPressed: (){},
+            onPressed: (){
+              Dialogs().logOutDialog(context: context);
+            },
             padding: const EdgeInsets.symmetric(vertical: 15),
             margin: const EdgeInsets.only(left: scaffoldHorizontalPadding,right: scaffoldHorizontalPadding,bottom: 20),
             style: NeumorphicStyle(color: Colors.red.shade400,depth: 8),child: Row(
@@ -64,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           Text("V 1.0.0",style: TextStyle(color: Colors.grey.shade700)),
-          SizedBox(height: 70),
+          const SizedBox(height: 70),
         ],
       ),
     );

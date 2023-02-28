@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:school_project/api_services/api_methods.dart';
 import 'package:school_project/common_widgets/animated_column.dart';
 import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/common_widgets/primary_button.dart';
 import 'package:school_project/common_widgets/text_style.dart';
 import 'package:school_project/screens/register/otp_verification_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/dialogs.dart';
 
 class RegisterScreen extends StatefulWidget {
-  const RegisterScreen({Key? key}) : super(key: key);
+  final String selectedSchoolId;
+  const RegisterScreen({Key? key, required this.selectedSchoolId}) : super(key: key);
 
   @override
   State<RegisterScreen> createState() => _RegisterScreenState();
@@ -37,9 +41,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   int currentIndex = 0;
 
-  // Widget indicator(){
-  //   return
-  // }
   @override
   void dispose() {
     _controller.dispose();
@@ -107,12 +108,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   isAnimate: true,
                   margin: const EdgeInsets.only(top: 60),
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OtpVerificationScreen(mobileNumber: mobileController.text.trim()),
-                      ),
-                    );
+                    if (mobileController.text.trim().length < 10) {
+                      Fluttertoast.showToast(msg: "Please enter valid Mobile Number",gravity: ToastGravity.CENTER);
+                    }else{
+                      Dialogs().showLoader(context: context);
+                      ApiMethods().sendOtp(type: "login",mobileNo: mobileController.text.trim(),schoolId: widget.selectedSchoolId).then((value){
+                        Navigator.of(context, rootNavigator: true).pop(true);
+                        if(value.success??false){
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => OtpVerificationScreen(mobileNumber: mobileController.text.trim()),
+                            ),
+                          );
+                        }else{
+                          Fluttertoast.showToast(msg: value.msg??"");
+                        }
+                      });
+                    }
                   },
                   title: 'Next',
                 ),

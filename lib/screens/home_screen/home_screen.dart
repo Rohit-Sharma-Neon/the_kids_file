@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
       backgroundColor: AppColors.primaryColor,
       appBar: BaseAppBar(
         title: "Home",
+        leading: const SizedBox.shrink(),
         actions: [
           Stack(
             alignment: Alignment.topRight,

@@ -48,6 +48,9 @@ dependencies:
   flutter_staggered_animations: ^1.1.1
   shared_preferences: ^2.0.17
   animate_do: ^3.0.2
+  circular_countdown_timer: ^0.2.2
+  fluttertoast: ^8.2.1
+  awesome_dialog: ^3.0.2
 
 dev_dependencies:
   flutter_test:

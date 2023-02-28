@@ -2,12 +2,19 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
+import 'package:school_project/api_services/api_methods.dart';
 import 'package:school_project/common_widgets/animated_column.dart';
 import 'package:school_project/common_widgets/base_app_bar.dart';
 import 'package:school_project/common_widgets/primary_button.dart';
+import 'package:school_project/main.dart';
+import 'package:school_project/providers/dashboard_provider.dart';
 import 'package:school_project/screens/home_screen/home_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
+import 'package:school_project/utils/app_string.dart';
+import 'package:school_project/utils/dialogs.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String mobileNumber;
@@ -22,11 +29,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   Timer? _timer;
   int _start = 60;
+  late DashBoardProvider dashBoardProvider;
 
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_){
         startTimer();
+        dashBoardProvider = Provider.of<DashBoardProvider>(context, listen: false);
     });
     super.initState();
   }
@@ -130,15 +139,26 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           ),
           GestureDetector(
             onTap: () {
-              _timer?.cancel();
-              _start = 60;
-              startTimer();
+              if (_start == 0) {
+                _timer?.cancel();
+                _start = 60;
+                startTimer();
+                Dialogs().showLoader(context: context);
+                ApiMethods().sendOtp(type: "login",mobileNo: widget.mobileNumber.trim()).then((value){
+                  Navigator.of(context, rootNavigator: true).pop(true);
+                  if(value.success??false){
+                    Fluttertoast.showToast(msg: value.msg??"");
+                  }else{
+                    Fluttertoast.showToast(msg: value.msg??"");
+                  }
+                });
+              }
             },
             child: Container(
               margin: const EdgeInsets.symmetric(horizontal: 46.0),
-              child: const Text(
+              child: Text(
                 'Resend Code',
-                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w700),
+                style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w700,color: _start == 0 ? Colors.black : Colors.grey),
               ),
             ),
           ),
@@ -148,12 +168,26 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           PrimaryButton(
             isAnimate: true,
             onTap: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomeScreen(),
-                ),
-              );
+              if (_pinController.text.trim().length < 4) {
+                Fluttertoast.showToast(msg: "Please enter valid OTP!",gravity: ToastGravity.CENTER);
+              }else{
+                Dialogs().showLoader(context: context);
+                ApiMethods().veryOTP(type: "login",mobileNo: widget.mobileNumber,otp: _pinController.text.trim()).then((value) async {
+                  Navigator.of(context, rootNavigator: true).pop(true);
+                  if(value.success??false){
+                    await spPreferences?.setBool(spKeys().isLoggedIn,value.success??false);
+                    dashBoardProvider.updateLoggedInStatus(loggedIn: value.success??false);
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const HomeScreen(),
+                      ),
+                    );
+                  }else{
+                    Fluttertoast.showToast(msg: value.msg??"");
+                  }
+                });
+              }
             },
             title: 'Confirm',
           )

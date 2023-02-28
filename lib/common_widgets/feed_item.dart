@@ -6,19 +6,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:persistent_bottom_nav_bar/persistent_tab_view.dart';
+import 'package:provider/provider.dart';
+import 'package:school_project/api_services/api_models/feed_model.dart';
 import 'package:school_project/common_widgets/text_widget.dart';
+import 'package:school_project/providers/dashboard_provider.dart';
 import 'package:school_project/screens/comment_screen/comment_screen.dart';
 import 'package:school_project/utils/app_colors.dart';
 import 'package:school_project/utils/app_images.dart';
+import 'package:school_project/utils/app_string.dart';
 import 'package:school_project/utils/dialogs.dart';
 import 'package:school_project/utils/helper_methods.dart';
 import 'package:share_plus/share_plus.dart';
 
 
-import '../modals/feed_modal.dart';
-
 class FeedItem extends StatefulWidget {
-  final FeedModal feedData;
+  final FeedData feedData;
   const FeedItem({Key? key, required this.feedData}) : super(key: key);
 
   @override
@@ -32,6 +34,14 @@ class _FeedItemState extends State<FeedItem> {
   int currentPage = 1;
   bool isLiked = false;
 
+  late DashBoardProvider dashBoardProvider;
+
+  @override
+  void initState() {
+    dashBoardProvider = Provider.of<DashBoardProvider>(context,listen: false);
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Neumorphic(
@@ -44,35 +54,48 @@ class _FeedItemState extends State<FeedItem> {
           color: AppColors.primaryColor),
       margin: const EdgeInsets.symmetric(horizontal: 13,vertical: 10),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 8.0),
             child: Row(
               children: [
-                const CircleAvatar(
-                  radius: 22,
-                  backgroundColor: Colors.transparent,
-                  backgroundImage: AssetImage(AppImages.appIcon),
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: Image.network(
+                    (imageBaseUrl)+(widget.feedData.headingPhoto??""),
+                    fit: BoxFit.fill,
+                    loadingBuilder: (BuildContext context, Widget child, ImageChunkEvent? loadingProgress) {
+                      if (loadingProgress == null) return child;
+                      return Center(
+                        child: CircularProgressIndicator(
+                          value: loadingProgress.expectedTotalBytes != null
+                              ? loadingProgress.cumulativeBytesLoaded /
+                              loadingProgress.expectedTotalBytes!
+                              : null,
+                        ),
+                      );
+                    },
+                    errorBuilder: (BuildContext context, Object exception, StackTrace? stackTrace) {
+                      return Image.asset(AppImages.appIcon,width: 40,height: 40,);
+                    },
+                    width: 40,
+                    height: 40,
+                  ),
                 ),
                 const SizedBox(
                   width: 10,
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
+                  children: [
                     CommonText(
-                      text: "The Kids File",
+                      text: widget.feedData.title??"",
                       fontWeight: FontWeight.bold,
                       color: AppColors.black,
                       fontSize: 14,
                     ),
-                    // CommonText(
-                    //   text: widget.feedData.email ?? '',
-                    //   color: AppColors.grey2,
-                    //   fontWeight: FontWeight.bold,
-                    //   fontSize: 12,
-                    // ),
                   ],
                 ),
               ],
@@ -87,17 +110,17 @@ class _FeedItemState extends State<FeedItem> {
                   height: deviceHeight(context) * 0.50,
                   width: double.infinity,
                   child: CarouselSlider.builder(
-                      itemCount: widget.feedData.images?.length,
+                      itemCount: widget.feedData.imagesList?.length??0,
                       carouselController: carouselController,
                       itemBuilder: (BuildContext context, int itemIndex, int pageViewIndex) {
                         return GestureDetector(
                           onTap: (){
-                            Dialogs().previewImage (imagePath: (widget.feedData.images?[itemIndex]??''), context: context);
+                            Dialogs().previewImage (imagePath: (imageBaseUrl)+(widget.feedData.imagesList?[itemIndex]??""), context: context);
                           },
                           child: Card(
                             elevation: 0,
-                            child: Image.asset(
-                              widget.feedData.images?[itemIndex] ?? '',
+                            child: Image.network(
+                              (imageBaseUrl)+(widget.feedData.imagesList?[itemIndex]??""),
                               fit: BoxFit.fill,
                               filterQuality: FilterQuality.medium,
                             ),
@@ -127,13 +150,13 @@ class _FeedItemState extends State<FeedItem> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(Radius.circular(50)),
-                        color: Colors.grey.shade800.withOpacity(0.6),
+                        color: Colors.grey.shade800.withOpacity(0.8),
                     ),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                      Text("$currentPage/${widget.feedData.images?.length}",style: const TextStyle(color: Colors.white,fontSize: 10,fontWeight: FontWeight.bold),),
+                      Text("$currentPage/${widget.feedData.imagesList?.length}",style: const TextStyle(color: Colors.white,fontSize: 10,fontWeight: FontWeight.bold),),
                     ]),
                   ),
                 ),
@@ -147,9 +170,21 @@ class _FeedItemState extends State<FeedItem> {
               children: [
                 GestureDetector(
                   onTap: (){
-                    setState(() {
-                      isLiked = !isLiked;
-                    });
+                    if (dashBoardProvider.isLoggedIn) {
+                      setState(() {
+                        if ((widget.feedData.isLikeStatus) == 0) {
+                          widget.feedData.isLikeStatus = 1;
+                          widget.feedData.likeCount = (widget.feedData
+                              .likeCount ?? 0) + 1;
+                        } else {
+                          widget.feedData.isLikeStatus = 0;
+                          widget.feedData.likeCount = (widget.feedData
+                              .likeCount ?? 0) - 1;
+                        }
+                      });
+                    }else{
+                      dashBoardProvider.changeTabIndex(tabIndex: 2);
+                    }
                   },
                   child: Row(
                     children: [
@@ -163,12 +198,12 @@ class _FeedItemState extends State<FeedItem> {
                         child: Icon(
                           Icons.favorite,
                           size: 25,
-                          color: isLiked ? Colors.red : Colors.grey,
+                          color: (widget.feedData.isLikeStatus??0) == 0 ? Colors.grey : Colors.red,
                         ),
                       ),
                       widthGap(5),
-                      const CommonText(
-                        text: '44',
+                      CommonText(
+                        text: (widget.feedData.likeCount??0).toString(),
                         color: AppColors.grey2,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -196,8 +231,8 @@ class _FeedItemState extends State<FeedItem> {
                         ),
                       ),
                       widthGap(5),
-                      const CommonText(
-                        text: '20',
+                      CommonText(
+                        text: (widget.feedData.commenCount??0).toString(),
                         color: AppColors.grey2,
                         fontWeight: FontWeight.bold,
                         fontSize: 12,
@@ -234,90 +269,6 @@ class _FeedItemState extends State<FeedItem> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _bottomsheet(BuildContext context) async {
-    return await showModalBottomSheet<void>(
-      context: context,
-      backgroundColor: Colors.transparent,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return StatefulBuilder(
-            builder: (BuildContext context, StateSetter setState) {
-              return Padding(
-                padding: MediaQuery.of(context).viewInsets,
-                child: Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 10),
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(10),
-                      topRight: Radius.circular(10),
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ListView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Row(
-                                      children: [
-
-                                        const CircleAvatar(
-                                          radius: 22,
-                                          backgroundColor: AppColors.grey,
-                                          backgroundImage:
-                                          AssetImage(AppImages.adImage),
-                                        ),
-                                        const SizedBox(
-                                          width: 10,
-                                        ),
-                                        CommonText(
-                                          text: widget.feedData.name ?? '',
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.black,
-                                          fontSize: 14,
-                                        ),
-                                        const SizedBox(
-                                          width: 5,
-                                        ),
-                                        const CommonText(
-                                          text: 'This is best pic',
-                                          fontWeight: FontWeight.bold,
-                                          color: AppColors.grey2,
-                                          fontSize: 14,
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                const Divider(
-                                  color: AppColors.grey,
-                                  thickness: 1,
-                                  height: 5,
-                                )
-                              ],
-                            );
-                          },
-                          itemCount: 5,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              );
-            });
-      },
     );
   }
 }
